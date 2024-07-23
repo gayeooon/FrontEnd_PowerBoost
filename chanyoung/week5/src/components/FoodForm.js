@@ -1,10 +1,9 @@
-import { useState } from "react";
-import FileInput from "./FileInput";
+import { useState } from 'react';
+import FileInput from './FileInput';
 
-//calorie 값이 숫자로 처리가 되지 않는 문제가 있어 추가로 type 이라는 값을 참고해서 인풋이 숫자형일 때만 따로 처리하는 함수
 function sanitize(type, value) {
   switch (type) {
-    case "number":
+    case 'number':
       return Number(value) || 0;
 
     default:
@@ -15,9 +14,9 @@ function sanitize(type, value) {
 function FoodForm() {
   const [values, setValues] = useState({
     imgFile: null,
-    title: "",
+    title: '',
     calorie: 0,
-    content: "",
+    content: '',
   });
 
   const handleSubmit = (e) => {
