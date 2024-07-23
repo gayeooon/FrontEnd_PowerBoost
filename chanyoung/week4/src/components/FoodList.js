@@ -23,17 +23,15 @@ function FoodListItem({ item, onDelete }) {
 }
 
 function FoodList({ items, onDelete }) {
-    return (
-      <ul className="FoodList">
-        {items.map((item) => (
-        //요소의 id 라는 프로퍼티가 각 요소를 구분할 수 있는 고유한 값이므로, 최상위 태그인 <li> 태그에 item.id 라는 값으로 key 지정
-          <li key={item.id}> 
-            <FoodListItem item={item} onDelete={onDelete} />
-          </li>
-        ))}
-      </ul>
-    );
-  }
-  
+  return (
+    <ul className="FoodList">
+      {items.map((item) => (
+        <li key={item.id}>
+          <FoodListItem item={item} onDelete={onDelete} />
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default FoodList;
