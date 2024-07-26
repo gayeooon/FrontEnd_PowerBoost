@@ -1,7 +1,10 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState } from 'react';
+import resetWhiteImg from '../assets/ic-reset-white.png';
+import placeholderImg from '../assets/preview-placeholder.png';
+import './FileInput.css';
 
-function FileInput({ name, value, onChange }) {
-  //파일 인풋 노드를 참조할 Ref 객체를 생성
+function FileInput({ className = '', initialPreview, name, value, onChange }) {
+  const [preview, setPreview] = useState(initialPreview);
   const inputRef = useRef();
 
   const handleChange = (e) => {
@@ -9,21 +12,47 @@ function FileInput({ name, value, onChange }) {
     onChange(name, nextValue);
   };
 
-  //파일 인풋 초기화 함수
   const handleClearClick = () => {
     const inputNode = inputRef.current;
     if (!inputNode) return;
 
-    inputNode.value = "";
+    inputNode.value = '';
     onChange(name, null);
   };
 
+  useEffect(() => {
+    if (!value) return;
+    const nextPreview = URL.createObjectURL(value);
+    setPreview(nextPreview);
+
+    return () => {
+      setPreview(initialPreview);
+      URL.revokeObjectURL(nextPreview);
+    };
+  }, [value, initialPreview]);
+
   return (
-    <div>
-      <input type="file" onChange={handleChange} ref={inputRef} />
-      <button type="button" onClick={handleClearClick}>
-        X
-      </button>
+    <div className={`FileInput ${className}`}>
+      <img
+        className={`FileInput-preview ${preview ? 'selected' : ''}`}
+        src={preview || placeholderImg}
+        alt="이미지 미리보기"
+      />
+      <input
+        className="FileInput-hidden-overlay"
+        type="file"
+        onChange={handleChange}
+        ref={inputRef}
+      />
+      {value && (
+        <button
+          className="FileInput-clear-button"
+          type="button"
+          onClick={handleClearClick}
+        >
+          <img src={resetWhiteImg} alt="지우기" />
+        </button>
+      )}
     </div>
   );
 }
