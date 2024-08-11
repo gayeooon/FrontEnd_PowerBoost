@@ -4,8 +4,22 @@ import FoodList from "./FoodList";
 import FoodForm from "./FoodForm";
 import { LocaleProvider } from "../contexts/LocaleContext";
 import LocaleSelect from "./LocaleSelect";
+import useTranslate from "../hooks/useTranslate";
+
+function AppSortButton({ selected, children, onClick }) {
+  return (
+    <button
+      disabled={selected}
+      className={'AppSortButton ${selected ? "selected" : ""}'}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}
 
 function App() {
+  const t = useTranslate();
   const [order, setOrder] = useState("createdAt");
   const [cursor, setCursor] = useState(null);
   const [items, setItems] = useState([]);
@@ -87,30 +101,28 @@ function App() {
   }, [order, search]);
 
   return (
-    <LocaleProvider defaultValue="ko">
-      <div>
-        <FoodForm onSubmit={createFood} onSubmitSuccess={handleCreateSuccess} />
-        <button onClick={handleNewestClick}>최신순</button>
-        <button onClick={handleCalorieClick}>칼로리순</button>
-        <form onSubmit={handleSearchSubmit}>
-          <input name="search" />
-          <button type="submit">검색</button>
-        </form>
-        <FoodList
-          items={sortedItems}
-          onUpdate={updateFood}
-          onUpdateSuccess={handleUpdateSuccess}
-          onDelete={handleDelete}
-        />
-        {cursor && (
-          <button disabled={isLoading} onClick={handleLoadMore}>
-            더보기
-          </button>
-        )}
-        {loadingError && <p>{loadingError.message}</p>}
-        <LocaleSelect />
-      </div>
-    </LocaleProvider>
+    <div className="App" style={{ backgroundImage: `url("${backgroundImg}")` }}>
+      <FoodForm onSubmit={createFood} onSubmitSuccess={handleCreateSuccess} />
+      <button onClick={handleNewestClick}>최신순</button>
+      <button onClick={handleCalorieClick}>칼로리순</button>
+      <form onSubmit={handleSearchSubmit}>
+        <input name="search" />
+        <button type="submit">검색</button>
+      </form>
+      <FoodList
+        items={sortedItems}
+        onUpdate={updateFood}
+        onUpdateSuccess={handleUpdateSuccess}
+        onDelete={handleDelete}
+      />
+      {cursor && (
+        <button disabled={isLoading} onClick={handleLoadMore}>
+          더보기
+        </button>
+      )}
+      {loadingError && <p>{loadingError.message}</p>}
+      <LocaleSelect />
+    </div>
   );
 }
 
