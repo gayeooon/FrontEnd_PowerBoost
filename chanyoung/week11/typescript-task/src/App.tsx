@@ -1,24 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useState } from "react";
+import Input from "./Input";
 
 function App() {
-  const [scores, setScores] = useState<number[]>([]);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [value, setValue] = useState<string>("");
 
-  useEffect(() => {
-    if (buttonRef.current) buttonRef.current.focus();
-  }, []);
-
-  function handleClick() {
-    const num = Math.floor(Math.random() * 10);
-    setScores([...scores, num]);
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    const nextValue = e.target.value;
+    setValue(nextValue);
   }
 
   return (
     <div>
-      <div>{scores}</div>
-      <button onClick={handleClick} ref={buttonRef}>
-        랜덤 숫자
-      </button>
+      <Input value={value} onChange={handleChange} />
+      <div>{value}</div>
     </div>
   );
 }
