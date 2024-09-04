@@ -1,10 +1,24 @@
-import Alert from "./components/Alert";
+import { useEffect, useRef, useState } from "react";
 
 function App() {
+  const [scores, setScores] = useState<number[]>([]);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (buttonRef.current) buttonRef.current.focus();
+  }, []);
+
+  function handleClick() {
+    const num = Math.floor(Math.random() * 10);
+    setScores([...scores, num]);
+  }
+
   return (
     <div>
-      <Alert level="info">안내 메시지 예시입니다.</Alert>
-      <Alert level="warn">경고 메시지 예시입니다.</Alert>
+      <div>{scores}</div>
+      <button onClick={handleClick} ref={buttonRef}>
+        랜덤 숫자
+      </button>
     </div>
   );
 }
